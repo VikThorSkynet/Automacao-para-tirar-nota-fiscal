@@ -3,13 +3,14 @@ import openpyxl
 import time
 import webbrowser
 import win32clipboard
+import pyperclip
 
 # Carrega o arquivo Excel e seleciona a planilha ativa
-workbook = openpyxl.load_workbook("C:\\Users\\Number One\\Desktop\\Importante\\NFC Automatico\\teste.xlsx")
+workbook = openpyxl.load_workbook(r"C:\Users\numbe\OneDrive\Área de Trabalho\Importante\NFC Automatico\teste.xlsx")
 sheet = workbook.active
 
 # Define a quantidade de linhas que deseja percorrer
-num_linhas = 24  # Exemplo, ajuste para o número de linhas necessárias
+num_linhas = 17  # Exemplo, ajuste para o número de linhas necessárias
 
 # URL do formulário
 url = "https://www.nfe-cidades.com.br/home/actions/emissaonf2"
@@ -26,7 +27,7 @@ for i in range(1, num_linhas + 1):
 
     webbrowser.open(url)
 
-    time.sleep(10)
+    time.sleep(4)
 
     # Rola a página para baixo
     pyautogui.scroll(-800)  # Valor negativo para rolar para baixo; positivo para cima
@@ -56,7 +57,9 @@ for i in range(1, num_linhas + 1):
     # Foco no terceiro campo e insere o valor de 'campo_c'
     pyautogui.click(x=1281, y=300)  # Coordenada do terceiro campo
     time.sleep(1)
-    pyautogui.write(str(campo_c), interval=0.1)
+    # Garante que o valor seja tratado como string e mantenha os zeros
+    campo_c_formatado = str(campo_c).zfill(len(str(campo_c)))  # Mantém os zeros à direita
+    pyautogui.write(campo_c_formatado, interval=0.1)
 
     # Pausa entre linhas para evitar sobrecarga e permitir revisão
     time.sleep(2)
@@ -67,39 +70,44 @@ for i in range(1, num_linhas + 1):
 
     pyautogui.click(x=1137, y=495) #Click emitir
 
-    pyautogui.moveTo(x=513, y=429)
+    #pyautogui.moveTo(x=512, y=512)
 
-    time.sleep(5)
+    time.sleep(2)
 
     # Seleciona a palavra com clique e arraste
-    #pyautogui.moveTo(x=513, y=429)
-    #time.sleep(4)
-    #pyautogui.mouseDown()      # Pressiona o botão do mouse
-    #time.sleep(3)            # Pequena pausa
-    #pyautogui.move(40, 0)    # Move o mouse x pixels para a direita para selecionar a palavra
-    #time.sleep(3)
-    #pyautogui.mouseUp()        # Solta o botão do mouse 
+    pyautogui.moveTo(x=512, y=512)
+    time.sleep(2)
+    pyautogui.mouseDown()      # Pressiona o botão do mouse
+    time.sleep(2)            # Pequena pausa
+    pyautogui.move(34, 0)    # Move o mouse x pixels para a direita para selecionar a palavra
+    time.sleep(2)
+    pyautogui.mouseUp()        # Solta o botão do mouse 
 
-    #time.sleep(3)
+    time.sleep(2)
 
     # Copia o texto selecionado usando Ctrl + C
-    #pyautogui.hotkey("ctrl", "c")
+    pyautogui.hotkey("ctrl", "c")
 
-    #time.sleep(3)
+    time.sleep(2)
 
     pyautogui.hotkey('ctrl', 'w')
 
-    #time.sleep(3)
+    time.sleep(2)
 
-    #win32clipboard.OpenClipboard()
-    #texto_copiado = win32clipboard.GetClipboardData()
-    #win32clipboard.CloseClipboard()
+    # Lê o conteúdo da área de transferência
+    try:
+        texto_copiado = pyperclip.paste()
+    except:
+        texto_copiado = "Erro na leitura"
+        print("Erro ao ler da área de transferência")
     
     # Salva o valor na coluna D do Excel
-    #sheet[f"D{i}"] = texto_copiado
-    #workbook.save("C:\\Users\\Number One\\Desktop\\Importante\\NFC Automatico\\teste.xlsx")
-
-
+    sheet[f"D{i}"] = texto_copiado
+    try:
+        workbook.save(r"C:\\Users\\numbe\\OneDrive\\Área de Trabalho\\Importante\\NFC Automatico\\teste.xlsx")
+    except PermissionError:
+        print("Erro ao salvar: Feche o arquivo Excel e tente novamente.")
+        break
 
 print("Processo concluído!")
 
