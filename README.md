@@ -1,93 +1,103 @@
-# NFC Automação - Sistema de Preenchimento Automático de NFC
+NFC Automático
+Descrição
+Este script automatiza o processo de emissão de NFC através de um formulário web. Ele realiza a leitura de dados a partir de um arquivo Excel, valida e formata os dados, e interage com o navegador para preencher e submeter o formulário. Por fim, o script copia a resposta gerada e a salva de volta no Excel.
 
-## 📋 Descrição
-Este projeto automatiza o processo de preenchimento de Notas Fiscais do Consumidor (NFC) através de um script Python que integra dados de uma planilha Excel com um formulário web.
+Funcionalidades
+Leitura de Dados: Carrega informações de um arquivo Excel utilizando a biblioteca openpyxl.
 
-## 🚀 Funcionalidades
-- Leitura automática de dados de uma planilha Excel
-- Preenchimento automático de formulários web de NFC
-- Validação de dados (CPF, campos vazios)
-- Captura automática do número da nota fiscal
-- Salvamento automático do número da NFC na planilha
+Validação e Formatação: Verifica e formata os campos (como CPF e valor), garantindo que os dados estejam no formato correto para o formulário.
 
-## 📦 Pré-requisitos
-Para executar este projeto, você precisará ter instalado:
+Automação Web: Abre o navegador, preenche os campos do formulário usando pyautogui, e interage com a interface (cliques, rolagens e digitação).
 
-```python
-pip install pyautogui
-pip install openpyxl
-pip install pyperclip
-```
+Extração e Salvamento: Copia a resposta gerada no formulário e a salva na planilha Excel na coluna especificada.
 
-## 🛠️ Configuração
-1. Estrutura da planilha Excel necessária:
-   - Coluna C: CPF
-   - Coluna D: Campo de preenchimento 1
-   - Coluna E: Campo de preenchimento 2
-   - Coluna F: Número da NFC (preenchido automaticamente)
+Pré-requisitos
+Python 3.x instalado no sistema.
 
-2. Ajuste as configurações no código:
-   - Caminho do arquivo Excel
-   - Linha inicial e número de linhas a serem processadas
-   - URL do formulário web
+Bibliotecas Python necessárias:
 
-## 💻 Como Usar
-1. Prepare sua planilha Excel com os dados necessários
-2. Ajuste as variáveis `linha_inicial` e `num_linhas` no código
-3. Execute o script:
-```python
-python nfc_auto.py
-```
+pyautogui
 
-## ⚠️ Considerações Importantes
-- O script utiliza coordenadas de tela específicas (pyautogui). Pode ser necessário ajustar as coordenadas de acordo com sua resolução de tela
-- Mantenha o arquivo Excel fechado durante a execução do script
-- O script inclui delays (time.sleep) para garantir o carregamento adequado das páginas
-- Certifique-se de ter uma conexão estável com a internet
+openpyxl
 
-## 🔍 Validações
-O script inclui as seguintes validações:
-- Verifica CPFs vazios
-- Verifica campos vazios ou marcados com "-"
-- Verifica células com destaque em amarelo
-- Tratamento de erros ao salvar no Excel
+pyperclip
 
-## 🚫 Tratamento de Erros
-- Verifica permissão de escrita no arquivo Excel
-- Trata erros na leitura da área de transferência
-- Validação de campos obrigatórios
+As bibliotecas webbrowser e time já fazem parte da biblioteca padrão do Python.
 
-## ⚙️ Personalização
-Para ajustar as coordenadas de clique:
-1. Use `pyautogui.position()` em um console Python separado
-2. Mova o mouse para a posição desejada
-3. Anote as coordenadas x,y
-4. Atualize no código as coordenadas nos comandos `pyautogui.click()`
+Instalação das Dependências
+Utilize o pip para instalar as bibliotecas necessárias:
 
-## 📝 Logs
-O script fornece feedback através do console sobre:
-- Linhas sendo processadas
-- Erros encontrados
-- Status do processo
+bash
+Copiar
+Editar
+pip install pyautogui openpyxl pyperclip
+Configuração
+Arquivo Excel:
 
-## 🤝 Contribuição
-Sinta-se à vontade para contribuir com o projeto através de:
-- Relatórios de bugs
-- Sugestões de melhorias
-- Pull requests
+Atualize a variável caminho_arquivo_excel no script para o caminho correto do seu arquivo Excel.
 
-## 📄 Licença
-Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+Certifique-se de que a planilha ativa contém os dados a partir da linha definida (por exemplo, a partir da linha 106) e que as colunas estão organizadas da seguinte forma:
 
-## 🎯 Dicas de Uso
-1. Mantenha o navegador como janela ativa durante a execução
-2. Não mova o mouse durante a execução do script
-3. Verifique periodicamente o arquivo Excel para garantir o correto salvamento
-4. Faça backup dos dados antes de executar o script
+Coluna C: CPF
 
-## 🔧 Solução de Problemas
-Se encontrar problemas:
-1. Verifique se todos os módulos estão instalados
-2. Confirme se as coordenadas de clique estão corretas para sua tela
-3. Ajuste os tempos de espera (time.sleep) se necessário
-4. Verifique se o arquivo Excel está acessível e não está aberto
+Coluna D: Campo B (pode ser uma descrição ou outro dado)
+
+Coluna E: Valor (que será formatado para duas casas decimais)
+
+Coluna F: Coluna onde a resposta será salva
+
+Coordenadas de Clique:
+
+Verifique e, se necessário, ajuste as coordenadas usadas nos comandos pyautogui.click() e pyautogui.moveTo(). Essas coordenadas devem corresponder à posição dos campos do formulário na sua tela.
+
+URL do Formulário:
+
+A URL do formulário a ser acessado está definida na variável url. Caso o endereço mude, atualize essa variável.
+
+Uso
+Para executar o script, abra o terminal ou prompt de comando e execute:
+
+bash
+Copiar
+Editar
+python nfc_auto1.py
+Durante a execução, o script realizará os seguintes passos:
+
+Lê os dados do arquivo Excel a partir da linha definida.
+
+Para cada linha, valida os dados e verifica se os campos estão corretos.
+
+Abre o navegador com a URL especificada e preenche os campos do formulário com os dados lidos.
+
+Clica no botão "Emitir" para enviar os dados.
+
+Seleciona e copia a resposta do formulário.
+
+Salva a resposta copiada na coluna F do Excel.
+
+Informa o status de cada etapa no terminal.
+
+Observações
+Permissões e Acesso:
+Certifique-se de que o arquivo Excel não esteja aberto em outro programa durante a execução, pois isso pode impedir que o script salve as alterações.
+
+Ajustes de Tempo:
+O script utiliza pausas (time.sleep()) para garantir o carregamento das páginas e a execução das interações. Dependendo da velocidade da sua internet e do desempenho do seu computador, pode ser necessário ajustar esses tempos.
+
+Resolução da Tela:
+As coordenadas definidas para os cliques podem variar de acordo com a resolução e o layout da sua tela. Faça os ajustes necessários para que o script interaja corretamente com os elementos do formulário.
+
+Troubleshooting
+Erro ao Carregar o Arquivo Excel:
+
+Verifique se o caminho definido na variável caminho_arquivo_excel está correto.
+
+Certifique-se de que o arquivo não está sendo utilizado por outro programa.
+
+Coordenadas Incorretas:
+
+Caso o script não clique no campo correto, ajuste as coordenadas nos comandos pyautogui.click() e pyautogui.moveTo() conforme a sua necessidade.
+
+Erro ao Salvar o Arquivo:
+
+Se ocorrer um erro de permissão ao salvar o Excel, feche qualquer instância do arquivo aberto em outro programa e verifique as permissões de escrita.
