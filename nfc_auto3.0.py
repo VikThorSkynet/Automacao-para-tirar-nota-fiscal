@@ -111,7 +111,7 @@ for i in range(linha_inicial, linha_inicial + num_linhas):
     # Aumenta a espera para garantir o carregamento completo da página
     time.sleep(7) # Espera 10 segundos
 
-    #Se for retroativo use o código abaixo
+    #Se for retroativo use o código abaixo<<<<<<<<<<< SE NÃO FOR USAR FAVOR COMENTAR ESSE TRECHO DE CODIGO
     pyautogui.moveTo(x=992, y=382) # Posição inicial da seleção
     time.sleep(1) # Reduzi a pausa
     pyautogui.mouseDown()
@@ -248,3 +248,4 @@ for i in range(linha_inicial, linha_inicial + num_linhas):
 
 # Mensagem final fora do loop
 print("\nProcesso concluído!")
+
