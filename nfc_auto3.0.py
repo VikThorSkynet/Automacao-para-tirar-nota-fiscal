@@ -6,7 +6,7 @@ import pyperclip
 
 # Carrega o arquivo Excel e seleciona a planilha ativa
 # *** IMPORTANTE: Certifique-se que o caminho para o arquivo está correto ***
-caminho_arquivo_excel = r"C:\Users\numbe\OneDrive\Área de Trabalho\Importante\NFC Automatico\NF ADULTO.xlsx"
+caminho_arquivo_excel = r"C:\Users\numbe\OneDrive\Área de Trabalho\Importante\NFC Automatico\7 NF ORIGEM Julho 25.xlsx"
 try:
     workbook = openpyxl.load_workbook(caminho_arquivo_excel)
     sheet = workbook.active
@@ -18,8 +18,8 @@ except Exception as e:
     exit()
 
 # Define a linha inicial e a quantidade de linhas que deseja percorrer
-linha_inicial = 106  # Linha do Excel onde os dados começam (ajuste se necessário)
-num_linhas = 1      # Quantidade de linhas a processar a partir da linha_inicial (ajuste conforme necessário)
+linha_inicial = 15  # Linha do Excel onde os dados começam (ajuste se necessário)
+num_linhas = 286      # Quantidade de linhas a processar a partir da linha_inicial (ajuste conforme necessário)
 
 # URL do formulário
 url = "https://www.nfe-cidades.com.br/home/actions/emissaonf2"
@@ -29,6 +29,12 @@ print(f"Iniciando processo da linha {linha_inicial} até {linha_inicial + num_li
 # Loop para percorrer as linhas no Excel
 for i in range(linha_inicial, linha_inicial + num_linhas):
     print(f"\nProcessando linha {i}...")
+
+    # Verifica se a coluna F já está preenchida
+    valor_coluna_f = sheet[f"F{i}"].value
+    if valor_coluna_f is not None and str(valor_coluna_f).strip() != "":
+        print(f"  Linha {i}: Coluna F já preenchida. Pulando para próxima linha.")
+        continue
 
     # --- Leitura dos Dados ---
     # Lê CPF (Coluna C)
@@ -78,8 +84,10 @@ for i in range(linha_inicial, linha_inicial + num_linhas):
     is_yellow = False
     if cor_celula_fill and cor_celula_fill.start_color and cor_celula_fill.start_color.rgb:
          cor_celula_rgb = cor_celula_fill.start_color.rgb
-         # Verifica os 6 últimos caracteres (RGB) para Amarelo (FFFF00), ignorando Alpha (FF inicial opcional)
-         if cor_celula_rgb[-6:] == "FFFF00":
+         # Converte o objeto RGB para string para verificar se é amarelo
+         cor_rgb_str = str(cor_celula_rgb)
+         # Verifica se contém FFFF00 (amarelo) na string RGB
+         if "FFFF00" in cor_rgb_str:
              is_yellow = True
              print(f"  Linha {i}: Célula E está amarela.")
 
@@ -101,12 +109,28 @@ for i in range(linha_inicial, linha_inicial + num_linhas):
         continue # Pula para a próxima linha se não conseguir abrir
 
     # Aumenta a espera para garantir o carregamento completo da página
-    time.sleep(10) # Espera 10 segundos
+    time.sleep(7) # Espera 10 segundos
+
+    #Se for retroativo use o código abaixo
+    pyautogui.moveTo(x=992, y=382) # Posição inicial da seleção
+    time.sleep(1) # Reduzi a pausa
+    pyautogui.mouseDown()
+    time.sleep(1) # Pausa curta com botão pressionado
+    # Ajuste o valor 45 se a palavra for maior ou menor
+    pyautogui.move(100, 0) # Move mais suavemente
+    time.sleep(1) # Pausa curta antes de soltar
+    pyautogui.mouseUp()
+    print("Data apagada para colocar nova data retroativo")
+    time.sleep(1)
+    #coloque a data retroativo
+    pyautogui.write("31/07/2025")#<<<< COLOQUE AQUI A DATA DO RETROATIVO
+    time.sleep(1)
+    print("Nova data retroativo colocada")
 
     # Rola a página para baixo para visualizar os campos
     pyautogui.scroll(-800)
     print("  Página rolada para baixo.")
-    time.sleep(2)
+    time.sleep(2.5)
 
     # Foco e preenchimento do campo CPF
     try:
@@ -161,7 +185,7 @@ for i in range(linha_inicial, linha_inicial + num_linhas):
         pyautogui.hotkey('ctrl', 'w')
         continue
 
-    time.sleep(2) # Espera alguma resposta da página
+    time.sleep(2.5) # Espera alguma resposta da página
 
     # Seleção e cópia de texto (AJUSTE AS COORDENADAS E O MOVIMENTO!)
     print("  Tentando selecionar e copiar texto de resposta...")
@@ -169,10 +193,10 @@ for i in range(linha_inicial, linha_inicial + num_linhas):
         pyautogui.moveTo(x=512, y=512) # Posição inicial da seleção
         time.sleep(1) # Reduzi a pausa
         pyautogui.mouseDown()
-        time.sleep(0.5) # Pausa curta com botão pressionado
+        time.sleep(1) # Pausa curta com botão pressionado
         # Ajuste o valor 45 se a palavra for maior ou menor
-        pyautogui.move(45, 0) # Move mais suavemente
-        time.sleep(0.5) # Pausa curta antes de soltar
+        pyautogui.move(48, 0) # Move mais suavemente
+        time.sleep(1) # Pausa curta antes de soltar
         pyautogui.mouseUp()
         print("  Texto selecionado (visualmente).")
         time.sleep(1)
