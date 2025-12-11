@@ -4,14 +4,35 @@ import time
 import webbrowser
 import pyperclip
 
-# Carrega o arquivo Excel e seleciona a planilha ativa
 # *** IMPORTANTE: Certifique-se que o caminho para o arquivo está correto ***
-caminho_arquivo_excel = r"C:\\Users\\numbe\\OneDrive\\Área de Trabalho\\Importante\\NFC Automatico\\10 NF ORIGEM Outubro 25.xlsx"
+# Definição dos 2 caminhos de arquivos Excel disponíveis
+caminho_excel_1 = r"C:\\Users\\numbe\\OneDrive\\Área de Trabalho\\Importante\\NFC Automatico\\NF ORIGEM.xlsx"
+caminho_excel_2 = r"C:\\Users\\numbe\\OneDrive\\Área de Trabalho\\Importante\\NFC Automatico\\NF ADULTO.xlsx"
+
+# Pergunta ao usuário qual arquivo deseja usar
+print("Escolha qual arquivo Excel deseja usar:")
+print("1 - ORIGEM")
+print("2 - ADULTO")
+escolha = input("Digite 1 ou 2: ").strip()
+
+# Seleciona o caminho baseado na escolha do usuário
+if escolha == "1":
+    caminho_arquivo_excel = caminho_excel_1
+    print(f"Arquivo selecionado: ORIGEM")
+elif escolha == "2":
+    caminho_arquivo_excel = caminho_excel_2
+    print(f"Arquivo selecionado: ADULTO")
+else:
+    print("Escolha inválida!")
+    exit()
+
 try:
     workbook = openpyxl.load_workbook(caminho_arquivo_excel)
     sheet = workbook.active
+    print(f"Arquivo Excel carregado com sucesso: {caminho_arquivo_excel}")
 except FileNotFoundError:
     print(f"Erro: O arquivo Excel não foi encontrado em '{caminho_arquivo_excel}'. Verifique o caminho.")
+    print("Verifique se o caminho está correto e se o arquivo existe.")
     exit() # Encerra o script se o arquivo não for encontrado
 except Exception as e:
     print(f"Erro ao carregar o arquivo Excel: {e}")
